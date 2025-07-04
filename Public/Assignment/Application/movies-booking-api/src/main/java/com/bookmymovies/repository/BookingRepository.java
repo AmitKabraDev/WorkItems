@@ -1,6 +1,18 @@
 package com.bookmymovies.repository;
 
-import com.bookmymovies.model.Movies;
+import com.bookmymovies.model.Bookings;
+import com.bookmymovies.model.Seatinventroy;
+import com.bookmymovies.model.SeatsStatusResponse;
+import com.bookmymovies.model.SeatsStatusConverter;
+import com.bookmymovies.model.BookSeatRequest;
+import com.bookmymovies.model.BookSeatResponse; 
+import com.bookmymovies.service.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.StoredProcedureQuery;
+import jakarta.persistence.ParameterMode;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface BookingRepository  extends JpaRepository<Movies, Long> {
+public interface BookingRepository extends JpaRepository<Bookings, String>, BookingRepositoryCustom {
 
     @Query(value = "select CAST(sh.show_id AS CHAR) as show_id,  CAST(sh.movie_id AS CHAR) as movie_id, \n" +
             " CAST(sh.screen_id  AS CHAR) as screen_id ,sc.screen_name, vn.venue_name, CAST(sh.start_datetime AS CHAR) as start_datetime,\n" +
@@ -27,13 +39,5 @@ public interface BookingRepository  extends JpaRepository<Movies, Long> {
             " where  sh.show_id= :show_id " , nativeQuery = true)
     List<Object[]> getSeatsStatus(String show_id);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update  Seatinventroy \n" +
-            "set is_locked=1,lock_time=current_timestamp,expiry_time=DATEADD(mi, 3,current_timestamp),lockedforuser= ?1 ,updated_by=current_user,updated_at=current_timestamp \n \n" +
-            "where show_id = ?2 and seat_id in ?3")
-    int bookSeats(String user_id,String show_id, String seat_ids);
 
 }
-
-

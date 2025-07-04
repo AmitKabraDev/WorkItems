@@ -1,4 +1,4 @@
-package com.bookmymovies.service.Impl;
+package com.bookmymovies.service.impl;
 
 import com.bookmymovies.model.BookSeatRequest;
 import com.bookmymovies.model.BookSeatResponse;
@@ -46,9 +46,12 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
+    /* 
     public BookSeatResponse bookSeats(BookSeatRequest seatDetails){
         int bookedSeats = bookingRepository.bookSeats(seatDetails.getUserId(),seatDetails.getShow_id(), seatDetails.getSeat_ids());
         BookSeatResponse resp = new BookSeatResponse();
+
+
         System.out.println(bookedSeats+" row(s) updated.");
         if(bookedSeats > 0){
             resp.setMessage("Seats has been reserved. Please complete the payment.");
@@ -63,34 +66,7 @@ public class BookingServiceImpl implements BookingService {
         resp.setMessage("Reservation unsuccessful.");
         return resp;
     }
-
-
-public int callBookTicket(Long showId, String userId, String seatIdsCsv) {
-
-        StoredProcedureQuery query = entityManager
-            .createStoredProcedureQuery("SpBookTicket")
-            .registerStoredProcedureParameter("show_id", Long.class, ParameterMode.IN)
-            .registerStoredProcedureParameter("bookinguser", String.class, ParameterMode.IN)
-            .registerStoredProcedureParameter("seat_ids", String.class, ParameterMode.IN)
-            .registerStoredProcedureParameter("bookcount", Integer.class, ParameterMode.OUT); 
-            query.setParameter("show_id", showId);
-            query.setParameter("bookinguser", userId);
-            query.setParameter("seat_ids", seatIdsCsv);
-        query.execute();
-        Integer returnValue = (Integer) query.getOutputParameterValue("bookcount");
-        return returnValue;
-
-        
-    }
-
-
+*/
 
 }
-   
-
-
-
-
-
-
 
