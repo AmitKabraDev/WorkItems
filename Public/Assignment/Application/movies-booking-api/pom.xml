@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.bookmymovies</groupId>
 	<artifactId>my-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>movies-booking-api</name>
 	<description>Online movie booking and theatre management API</description>
 	<properties>

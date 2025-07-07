@@ -10,10 +10,10 @@ import jakarta.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "Seatinventroy")
-public class Seatinventroy {
+@Table(name = "Seatinventory")
+public class Seatinventory {
     @Id
-    String seatinventroy_id;
+    String seatinventory_id;
     String lockedforuser;
     String seat_id;
     boolean is_booked;

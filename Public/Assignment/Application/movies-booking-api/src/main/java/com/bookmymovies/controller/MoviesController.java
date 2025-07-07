@@ -6,7 +6,7 @@ import java.util.List;
 import com.bookmymovies.model.MovieWithShowsResponse;
 import com.bookmymovies.model.MoviesResponse;
 import com.bookmymovies.model.TheatreResponse;
-import com.bookmymovies.service.Impl.MovieServiceImpl;
+import com.bookmymovies.service.impl.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

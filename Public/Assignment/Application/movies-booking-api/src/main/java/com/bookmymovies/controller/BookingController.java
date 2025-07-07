@@ -25,6 +25,12 @@ import java.util.Arrays;
 @RequestMapping("/api/booking")
 public class BookingController {
 
+	private final BookingRepositoryImpl bookingRepository;
+
+    public BookingController(BookingRepositoryImpl bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
+
 	@Autowired
 	BookingServiceImpl bookingService; 
 
@@ -73,14 +79,12 @@ public class BookingController {
 								"{\"user_id\":\"XXXX\",\r\n\"show_id\":1005,\r\n\"seat_ids\":\"406,407\"}");
 			}
 			
-			
-		// Call the custom repository method to book tickets
-			BookingRepositoryImpl brCustom = new BookingRepositoryImpl();
-        int bookedCount = brCustom.callBookTicket(Long.parseLong(req.getShow_id()), req.getUserId(),  req.getSeat_ids());
 
+        BookSeatResponse bookSeatResponse = bookingRepository.callBookTicket(Long.parseLong(req.getShow_id()), req.getUserId(),  req.getSeat_ids());
+ 		System.out.println("Call Message: " + bookSeatResponse.getMessage());
 
-        if (bookedCount > 0) {
-            return ResponseEntity.ok("Successfully reserved " + bookedCount + " seats. Please complete the payment.");
+        if (bookSeatResponse.getStatusCode() > 0) {
+            return ResponseEntity.ok("Successfully reserved " + bookSeatResponse.getStatusCode() + " seat(s). Please complete the payment.\n" + bookSeatResponse.getMessage());
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Booking failed. Seats may be already locked or unavailable.");
         }

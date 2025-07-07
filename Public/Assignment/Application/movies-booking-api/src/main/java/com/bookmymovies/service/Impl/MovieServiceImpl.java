@@ -1,4 +1,4 @@
-package com.bookmymovies.service.Impl;
+package com.bookmymovies.service.impl;
 
 import com.bookmymovies.model.*;
 import com.bookmymovies.repository.MoviesRepository;
