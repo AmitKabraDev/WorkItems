@@ -7,6 +7,9 @@ import com.bookmymovies.model.MovieWithShowsResponse;
 import com.bookmymovies.model.MoviesResponse;
 import com.bookmymovies.model.TheatreResponse;
 import com.bookmymovies.service.impl.MovieServiceImpl;
+import com.bookmymovies.util.InputValidator;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 @CrossOrigin(origins = "http://localhost:8080")
@@ -37,13 +41,20 @@ public class MoviesController {
 		try {
 			List<MoviesResponse> movies = new ArrayList<>();
 			System.out.println("city is: "+city);
-			movies = movieService.getAllMovies(city);
 
-			if (movies.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
+			if (InputValidator.isValidInput(city)  )
+			{
+				movies = movieService.getAllMovies(city);
 
-			return new ResponseEntity<>(movies, HttpStatus.OK);
+				if (movies.isEmpty()) {
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				}
+
+				return new ResponseEntity<>(movies, HttpStatus.OK);
+			} 
+			else {
+				return ResponseEntity.badRequest().body(null);
+			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,13 +66,28 @@ public class MoviesController {
 		try {
 			MovieWithShowsResponse movieDetail;
 			System.out.println("city is: "+ String.valueOf(city)  + ", Movieid:"  + String.valueOf(movie_id) + ", showdate:"  + String.valueOf(showdate));
-			movieDetail = movieService.getMovieWithShows(city,movie_id,showdate);
+			
+			if (InputValidator.isValidInput( movie_id, 10, true)  )
+			{
+				LocalDate parsedDate = null;
+				if (showdate != null && !(showdate.isEmpty())) {
+			
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					parsedDate = LocalDate.parse(showdate, formatter);
+			
+				}
+				
+				movieDetail = movieService.getMovieWithShows(city,movie_id,parsedDate);
 
-			if (movieDetail == null) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				if (movieDetail == null) {
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				}
+
+				return new ResponseEntity<>(movieDetail, HttpStatus.OK);
+			} 
+			else {
+				return ResponseEntity.badRequest().body(null);
 			}
-
-			return new ResponseEntity<>(movieDetail, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,13 +98,21 @@ public class MoviesController {
 	public ResponseEntity<List<TheatreResponse>> getTheatreDetail(@PathVariable(required = true) String theatre_id) {
 		try {
 			List<TheatreResponse> movies = new ArrayList<>();
-			movies = movieService.getTheatreDetail(theatre_id);
 
-			if (movies.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		
+			if (InputValidator.isValidInput( theatre_id, 10, true)  )
+			{
+				movies = movieService.getTheatreDetail(theatre_id);
+
+				if (movies.isEmpty()) {
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				}
+
+				return new ResponseEntity<>(movies, HttpStatus.OK);
+			} 
+			else {
+				return ResponseEntity.badRequest().body(null);
 			}
-
-			return new ResponseEntity<>(movies, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

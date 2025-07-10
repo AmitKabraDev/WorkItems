@@ -6,7 +6,7 @@ import com.bookmymovies.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +44,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieWithShowsResponse getMovieWithShows(String city, String movie_id, String showdate ) {
+    public MovieWithShowsResponse getMovieWithShows(String city, String movie_id, LocalDate showdate ) {
         MoviesResponse movie = moviesRepository.getMovieDetail(movie_id,city).stream()
                 .map(moviesResultConverter::convert)
                 .toList().get(0);

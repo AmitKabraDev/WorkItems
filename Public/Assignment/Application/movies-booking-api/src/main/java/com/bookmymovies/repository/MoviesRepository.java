@@ -1,7 +1,7 @@
 package com.bookmymovies.repository;
 
 import java.util.List;
-
+import java.time.LocalDate;
 import com.bookmymovies.model.Movies;
 import com.bookmymovies.model.MoviesResponse;
 import com.bookmymovies.model.TheatreResponse;
@@ -60,5 +60,5 @@ public interface MoviesRepository extends JpaRepository<Movies, Long> {
           "          left join Venues vn on sc.venue_id = vn.venue_id\n" +
           "          left join Addresses ad on vn.addressid = ad.addressid\n" +
           "          where mv.movie_id = :movie_id and ( LOWER(ad.city) =:city or :city is NULL )  and ( cast(sh.start_datetime as date) =:showdate or :showdate is NULL )")
-  List<Object[]> getShowsForMovie(String movie_id,String city, String showdate );
+  List<Object[]> getShowsForMovie(String movie_id,String city, LocalDate showdate );
 }
